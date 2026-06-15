@@ -179,3 +179,12 @@ The most important design choice was making the agent stop early when search fai
 Testing each tool in isolation made the planning loop easier to debug. Once I knew that `search_listings`, `suggest_outfit`, and `create_fit_card` worked independently, I could focus on whether state was being passed correctly between them.
 
 One thing I would improve in a future version is the query parser. Right now it uses simple regex and string cleanup. A more robust version could use an LLM or a structured parser to better separate item description, size, budget, and wardrobe preferences.
+
+## Stretch Feature: Retry Logic with Fallback
+
+If the first search returns no results, FitFindr automatically retries the search without the size and price filters. The agent stores a `fallback_message` in the session explaining what was adjusted.
+
+Example:
+`baby tee size XXS under $5`
+
+The exact search fails because there is no baby tee in size XXS under $5. FitFindr then retries using only the item description, finds a baby tee, and continues through outfit suggestion and fit card generation.
