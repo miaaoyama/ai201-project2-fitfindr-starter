@@ -188,3 +188,15 @@ Example:
 `baby tee size XXS under $5`
 
 The exact search fails because there is no baby tee in size XXS under $5. FitFindr then retries using only the item description, finds a baby tee, and continues through outfit suggestion and fit card generation.
+
+## Stretch Feature: Price Comparison Tool
+
+FitFindr includes a `compare_price(new_item)` tool. The tool compares the selected item’s price against other listings in the same category from `data/listings.json`.
+
+It calculates the average price of comparable listings and returns a verdict:
+- Great deal
+- Fair price
+- Slightly overpriced
+
+Example output:
+`Great deal: This item costs $18. Similar tops listings average about $22, based on 14 comparable items in the dataset.`

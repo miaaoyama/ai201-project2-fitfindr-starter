@@ -266,3 +266,44 @@ Requirements:
 
     except Exception as e:
         return f"Sorry, I couldn't create a fit card right now: {e}"
+    
+    # ── Stretch Tool: compare_price ───────────────────────────────────────────────
+
+def compare_price(new_item: dict) -> str:
+    """
+    Compare the selected item's price to similar listings in the dataset.
+
+    Similar listings are items in the same category. The tool calculates
+    the average price of comparable items and returns a price assessment.
+    """
+    listings = load_listings()
+
+    category = new_item.get("category")
+    price = float(new_item.get("price", 0))
+    item_id = new_item.get("id")
+
+    comparable_prices = [
+        float(item.get("price", 0))
+        for item in listings
+        if item.get("category") == category
+        and item.get("id") != item_id
+    ]
+
+    if not comparable_prices:
+        return "Not enough comparable listings to assess the price."
+
+    average_price = sum(comparable_prices) / len(comparable_prices)
+
+    if price < average_price * 0.9:
+        verdict = "Great deal"
+    elif price > average_price * 1.1:
+        verdict = "Slightly overpriced"
+    else:
+        verdict = "Fair price"
+
+    return (
+        f"{verdict}: This item costs ${price:.0f}. "
+        f"Similar {category} listings average about ${average_price:.0f}, "
+        f"based on {len(comparable_prices)} comparable items in the dataset."
+    )
+
